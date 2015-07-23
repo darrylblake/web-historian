@@ -1,3 +1,4 @@
+var http = require('http');
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
@@ -22,20 +23,56 @@ exports.initialize = function(pathsObj){
   });
 };
 
+
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(){
+exports.readListOfUrls = function(callback){
+  fs.readFile(exports.paths.list, "ascii", function (err, data) {
+    if (err) throw err;
+    // callback(JSON.parse(data));
+    callback(data.split('\n'));
+  });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url, callback){
+  exports.readListOfUrls(function(listOfUrls) {
+    callback(_.contains(listOfUrls, url));
+  });
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url, callback){
+  fs.appendFile(exports.paths.list, url + '\n', function (err) {
+    // Do something on error
+    if (err) console.log(err);
+    callback && callback();
+  });
 };
 
-exports.isUrlArchived = function(){
+exports.isUrlArchived = function(url, callback){
+  fs.open(path.join(exports.paths.archivedSites, url), 'r', function(err) {
+    if (err) callback(false);
+    else callback(true);
+  });
+
 };
 
-exports.downloadUrls = function(){
+exports.downloadUrls = function(listOfUrls){
+  listOfUrls.forEach(function (url) {
+    downloadUrl(url);
+  });
+};
+
+var downloadUrl = function (url) {
+
+  http.get('http://' + url, function(http_res) {
+    var html = '';
+    http_res.on('data', function (chunk) {
+      html += chunk;
+    });
+    var filePath = path.join(exports.paths.archivedSites, url);
+    http_res.on('end', function () {
+      fs.writeFile(filePath, html);
+    });
+  });
 };
