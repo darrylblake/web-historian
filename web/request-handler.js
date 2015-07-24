@@ -15,8 +15,10 @@ var actions = {
       body += chunk;
     });
     req.on('end', function() {
-      archive.addUrlToList(JSON.parse(body).url);
-      helpers.sendRedirect(res, location);
+      // Todo: This can't be right.
+      var location = body.split('=')[1];
+      archive.addUrlToList(location);
+      helpers.sendRedirect(res, 'loading.html');
     });
   }
 }

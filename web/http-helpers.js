@@ -28,8 +28,7 @@ exports.serveAssets = function(res, asset, callback) {
       fs.readFile(archive.paths.archivedSites + pathName, function(err, data) {
         // If archive doesn't yet exist
         if (err) {
-          archive.addUrlToList(pathName.substr(1));
-          exports.sendRedirect(res, '/loading.html');
+          exports.sendResponse(res, '404: Does not exist', 404);
         // Return archived website
         } else {
           exports.sendResponse(res, data, 200);

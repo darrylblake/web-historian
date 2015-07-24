@@ -57,7 +57,7 @@ describe("server", function() {
 
         request
           .post("/")
-          .send({ url: url })
+          .send('url='+ url)
           .expect(302, function (err) {
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
@@ -108,7 +108,6 @@ describe("archive helpers", function(){
     it("should add a url to the list", function (done) {
       var urlArray = ["example1.com", "example2.com\n"];
       fs.writeFileSync(archive.paths.list, urlArray.join("\n"));
-
       archive.addUrlToList("someurl.com", function () {
         archive.isUrlInList("someurl.com", function (is) {
           expect(is);
@@ -146,7 +145,7 @@ describe("archive helpers", function(){
       setTimeout(function () {
         expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(urlArray);
         done();
-      }, 25);
+      }, 200);
     });
   });
 });
