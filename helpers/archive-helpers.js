@@ -23,7 +23,6 @@ exports.initialize = function(pathsObj){
   });
 };
 
-
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
@@ -44,7 +43,7 @@ exports.isUrlInList = function(url, callback){
 exports.addUrlToList = function(url, callback){
   fs.appendFile(exports.paths.list, url + '\n', function (err) {
     // Do something on error
-    if (err) console.log(err);
+    //if (err) console.log(err);
     callback && callback();
   });
 };
@@ -64,7 +63,6 @@ exports.downloadUrls = function(listOfUrls){
 };
 
 var downloadUrl = function (url) {
-
   http.get('http://' + url, function(http_res) {
     var html = '';
     http_res.on('data', function (chunk) {

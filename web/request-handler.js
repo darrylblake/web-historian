@@ -15,9 +15,8 @@ var actions = {
       body += chunk;
     });
     req.on('end', function() {
-      // Todo: This can't be right.
-      var location = '/archive/' + body.split('=')[1];
-      helpers.redirect(res, location);
+      archive.addUrlToList(JSON.parse(body).url);
+      helpers.sendRedirect(res, location);
     });
   }
 }
