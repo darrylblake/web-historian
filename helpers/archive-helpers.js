@@ -60,7 +60,7 @@ exports.downloadUrls = function(listOfUrls){
   });
 };
 
-var downloadUrl = function (url) {
+function downloadUrl(url) {
   http.get('http://' + url, function(http_res) {
     var html = '';
     http_res.on('data', function (chunk) {
@@ -70,5 +70,7 @@ var downloadUrl = function (url) {
     http_res.on('end', function () {
       fs.writeFile(filePath, html);
     });
+  }).on('error', function(err) {
+    console.log(err);
   });
 };
